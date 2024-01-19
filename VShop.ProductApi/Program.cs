@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using VShop.ProductApi.Context;
+using VShop.ProductApi.Repositories;
+using VShop.ProductApi.Services;
+using VShop.ProductApi.Services.Interfaces;
 
 namespace VShop.ProductApi
 {
@@ -25,6 +28,13 @@ namespace VShop.ProductApi
 
             #region AutoMapper
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            #endregion
+
+            #region Registrando os Serviços no container DI
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
             #endregion
 
             var app = builder.Build();
