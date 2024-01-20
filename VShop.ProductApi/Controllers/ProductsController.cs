@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using VShop.ProductApi.DTOs;
 using VShop.ProductApi.Services.Interfaces;
 
@@ -50,7 +49,7 @@ namespace VShop.ProductApi.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPut]
         public async Task<ActionResult> Put(int id, [FromBody] ProductDTO produtoDTO)
         {
             if (id != produtoDTO.Id)
@@ -60,7 +59,7 @@ namespace VShop.ProductApi.Controllers
                 return BadRequest("Dados inválidos!");
 
             await _productService.UpdateProductAsync(produtoDTO);
-            
+
             return Ok(produtoDTO);
         }
 
