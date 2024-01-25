@@ -9,7 +9,7 @@ namespace VShop.Web
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            #region HttpClientFactory
+            #region HttpClientFactory - cliente nomeado
             builder.Services.AddHttpClient("ProductApi", c =>
             {
                 c.BaseAddress = new Uri(builder.Configuration["ServiceUri:ProductApi"]);
