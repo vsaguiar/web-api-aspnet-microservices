@@ -1,3 +1,6 @@
+using VShop.Web.Services;
+using VShop.Web.Services.Interfaces;
+
 namespace VShop.Web
 {
     public class Program
@@ -15,6 +18,8 @@ namespace VShop.Web
                 c.BaseAddress = new Uri(builder.Configuration["ServiceUri:ProductApi"]);
             });
             #endregion
+
+            builder.Services.AddScoped<IProductService, ProductService>();
 
             var app = builder.Build();
 
