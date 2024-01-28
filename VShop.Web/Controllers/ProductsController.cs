@@ -50,4 +50,29 @@ public class ProductsController : Controller
 
         return View(productVM);
     }
+
+    public async Task<IActionResult> UpdateProduct(int id)
+    {
+        ViewBag.CategoryId = new SelectList(await _categoryService.GetAllCategoriesAsync(), "CategoryId", "Name");
+
+        var result = await _productService.GetProductByIdAsync(id);
+
+        if (result is null)
+            return View("Error");
+
+        return View(result);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateProduct(ProductViewModel productVM)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _productService.UpdateProductAsync(productVM);
+
+            if (result is not null) 
+                return RedirectToAction(nameof(Index));
+        }
+        return View(productVM);
+    }
 }
