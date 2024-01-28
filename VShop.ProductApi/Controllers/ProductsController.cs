@@ -27,7 +27,7 @@ namespace VShop.ProductApi.Controllers
         }
 
 
-        [HttpGet("id", Name = "GetProduct")]
+        [HttpGet("{id}", Name = "GetProduct")]
         public async Task<ActionResult<ProductDTO>> Get(int id)
         {
             var produtoDTO = await _productService.GetProductByIdAsync(id);
