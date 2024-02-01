@@ -11,7 +11,7 @@ public class IdentityConfiguration
 
     // Permite modelar um escopo que permitirá que um aplicativo cliente exiba um subconjunto de declarações sobre um usuário.
     // Ex: O escopo profile permite que o aplicativo veja declarações sobre o usuário, como nome e data de nascimento
-    public static IEnumerable<IdentityResource> IdentityResource => new List<IdentityResource>
+    public static IEnumerable<IdentityResource> IdentityResources => new List<IdentityResource>
     {
         new IdentityResources.OpenId(),
         new IdentityResources.Email(),
@@ -61,5 +61,4 @@ public class IdentityConfiguration
                 }
         };
 
-    public static IEnumerable<IdentityResource> IdentityResources { get; internal set; }
 }
