@@ -1,8 +1,10 @@
+using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using VShop.IdentityServer.Configuration;
 using VShop.IdentityServer.Data;
 using VShop.IdentityServer.SeedDatabase;
+using VShop.IdentityServer.Services;
 
 namespace VShop.IdentityServer
 {
@@ -48,6 +50,7 @@ namespace VShop.IdentityServer
             #endregion
 
             builder.Services.AddScoped<IDatabaseSeedInitializer, DatabaseIdentityServerInitializer>();
+            builder.Services.AddScoped<IProfileService, ProfileAppService>();
 
             var app = builder.Build();
 
