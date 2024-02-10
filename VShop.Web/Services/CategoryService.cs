@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net.Http.Headers;
+using System.Text.Json;
 using VShop.Web.Models;
 using VShop.Web.Services.Interfaces;
 
@@ -16,9 +17,10 @@ public class CategoryService : ICategoryService
         _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true }; // não considera caixa alta e/ou caixa baixa
     }
 
-    public async Task<IEnumerable<CategoryViewModel>> GetAllCategoriesAsync()
+    public async Task<IEnumerable<CategoryViewModel>> GetAllCategoriesAsync(string token)
     {
         var client = _clientFactory.CreateClient("ProductApi");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         IEnumerable<CategoryViewModel> categories;
 

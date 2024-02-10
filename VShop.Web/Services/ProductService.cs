@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 using VShop.Web.Models;
 using VShop.Web.Services.Interfaces;
@@ -19,9 +20,10 @@ public class ProductService : IProductService
         _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true }; // não considera caixa alta e/ou caixa baixa
     }
 
-    public async Task<IEnumerable<ProductViewModel>> GetAllProductsAsync()
+    public async Task<IEnumerable<ProductViewModel>> GetAllProductsAsync(string token)
     {
         var client = _clientFactory.CreateClient("ProductApi");
+        PutTokenInHeaderAuthorization(token, client);
 
         using (var response = await client.GetAsync(apiEndpoint))
         {
@@ -42,9 +44,10 @@ public class ProductService : IProductService
         return listProductsVM;
     }
 
-    public async Task<ProductViewModel> GetProductByIdAsync(int id)
+    public async Task<ProductViewModel> GetProductByIdAsync(int id, string token)
     {
         var client = _clientFactory.CreateClient("ProductApi");
+        PutTokenInHeaderAuthorization(token, client);
 
         using (var response = await client.GetAsync(apiEndpoint + id))
         {
@@ -65,9 +68,10 @@ public class ProductService : IProductService
         return productVM;
     }
 
-    public async Task<ProductViewModel> CreateProductAsync(ProductViewModel productVM)
+    public async Task<ProductViewModel> CreateProductAsync(ProductViewModel productVM, string token)
     {
         var client = _clientFactory.CreateClient("ProductApi");
+        PutTokenInHeaderAuthorization(token, client);
 
         StringContent content = new StringContent(JsonSerializer.Serialize(productVM), Encoding.UTF8, "application/json");
 
@@ -90,9 +94,11 @@ public class ProductService : IProductService
         return productVM;
     }
 
-    public async Task<ProductViewModel> UpdateProductAsync(ProductViewModel productVM)
+    public async Task<ProductViewModel> UpdateProductAsync(ProductViewModel productVM, string token)
     {
         var client = _clientFactory.CreateClient("ProductApi");
+        PutTokenInHeaderAuthorization(token, client);
+
         ProductViewModel productUpdated = new ProductViewModel();
 
         using (var response = await client.PutAsJsonAsync(apiEndpoint, productVM))
@@ -114,9 +120,10 @@ public class ProductService : IProductService
         return productUpdated;
     }
 
-    public async Task<bool> DeleteProductByIdAsync(int id)
+    public async Task<bool> DeleteProductByIdAsync(int id, string token)
     {
         var client = _clientFactory.CreateClient("ProductApi");
+        PutTokenInHeaderAuthorization(token, client);
 
         using (var response = await client.DeleteAsync(apiEndpoint + id))
         {
@@ -126,5 +133,10 @@ public class ProductService : IProductService
             }
         }
         return false;
+    }
+
+    private static void PutTokenInHeaderAuthorization(string token, HttpClient client)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }
 }

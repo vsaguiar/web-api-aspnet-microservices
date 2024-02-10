@@ -4,5 +4,5 @@ namespace VShop.Web.Services.Interfaces;
 
 public interface ICategoryService
 {
-    Task<IEnumerable<CategoryViewModel>> GetAllCategoriesAsync();
+    Task<IEnumerable<CategoryViewModel>> GetAllCategoriesAsync(string token);
 }
