@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using VShop.Web.Services;
 using VShop.Web.Services.Interfaces;
 
@@ -28,24 +29,24 @@ namespace VShop.Web
                 .AddCookie("Cookies", c =>
                 {
                     c.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-                    //c.Events = new CookieAuthenticationEvents()
-                    //{
-                    //    OnRedirectToAccessDenied = (context) =>
-                    //    {
-                    //        context.HttpContext.Response.Redirect(builder.Configuration["ServiceUri:IdentityServer"] + "/Account/AccessDenied");
-                    //        return Task.CompletedTask;
-                    //    }
-                    //};
+                    c.Events = new CookieAuthenticationEvents()
+                    {
+                        OnRedirectToAccessDenied = (context) =>
+                        {
+                            context.HttpContext.Response.Redirect(builder.Configuration["ServiceUri:IdentityServer"] + "/Account/AccessDenied");
+                            return Task.CompletedTask;
+                        }
+                    };
                 })
                 .AddOpenIdConnect("oidc", options =>
                 {
-                    //options.Events.OnRemoteFailure = context =>
-                    //{
-                    //    context.Response.Redirect("/");
-                    //    context.HandleResponse();
+                    options.Events.OnRemoteFailure = context =>
+                    {
+                        context.Response.Redirect("/");
+                        context.HandleResponse();
 
-                    //    return Task.FromResult(0);
-                    //};
+                        return Task.FromResult(0);
+                    };
 
                     options.Authority = builder.Configuration["ServiceUri:IdentityServer"];
                     options.GetClaimsFromUserInfoEndpoint = true;
