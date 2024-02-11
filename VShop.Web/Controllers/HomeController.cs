@@ -3,21 +3,39 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using VShop.Web.Models;
+using VShop.Web.Services.Interfaces;
 
 namespace VShop.Web.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IProductService _productService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IProductService productService)
         {
             _logger = logger;
+            _productService = productService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var products = await _productService.GetAllProductsAsync(string.Empty);
+
+            if (products == null)
+                return View("Error");
+            
+            return View(products);
+        }
+
+        public async Task<ActionResult<ProductViewModel>> ProductDetails(int id)
+        {
+            var product = await _productService.GetProductByIdAsync(id, string.Empty);
+
+            if (product == null)
+                return View("Error");
+
+            return View(product);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
