@@ -21,6 +21,16 @@ namespace VShop.ProductApi
 
             builder.Services.AddEndpointsApiExplorer();
 
+            #region CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            });
+            #endregion
+
             #region Token JWT no Swagger
             builder.Services.AddSwaggerGen(c =>
             {
@@ -108,8 +118,9 @@ namespace VShop.ProductApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            
             app.UseHttpsRedirection();
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
