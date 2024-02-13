@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using VShop.CartApi.Context;
+using VShop.CartApi.Repositories;
 
 namespace VShop.CartApi
 {
@@ -97,6 +98,8 @@ namespace VShop.CartApi
             #region AutoMapper
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             #endregion
+
+            builder.Services.AddScoped<ICartRepository, CartRepository>();
 
             var app = builder.Build();
 
