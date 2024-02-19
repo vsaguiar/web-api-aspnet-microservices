@@ -15,12 +15,16 @@ namespace VShop.Web
             builder.Services.AddControllersWithViews();
 
             #region HttpClientFactory - cliente nomeado
-            builder.Services.AddHttpClient("ProductApi", c =>
+            builder.Services.AddHttpClient<IProductService, ProductService>("ProductApi", c =>
             {
                 c.BaseAddress = new Uri(builder.Configuration["ServiceUri:ProductApi"]);
             });
+
+            builder.Services.AddHttpClient<ICartService, CartService>("CartApi",
+                c => c.BaseAddress = new Uri(builder.Configuration["ServiceUri:CartApi"]));
             #endregion
 
+            #region Autenticação
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultScheme = "Cookies";
@@ -60,7 +64,9 @@ namespace VShop.Web
                     options.Scope.Add("vshop");
                     options.SaveTokens = true;
                 });
+            #endregion
 
+            builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
 
