@@ -107,7 +107,7 @@ public class CartRepository : ICartRepository
         return _mapper.Map<CartDTO>(cart);
     }
 
-    private async Task UpdateQuantityAndItems(CartDTO cartDto, Cart cart, CartHeader? cartHeader)
+    private async Task UpdateQuantityAndItems(CartDTO cartDto, Cart cart, CartHeader cartHeader)
     {
         //Se CartHeader não é null
         //verifica se CartItems possui o mesmo produto
