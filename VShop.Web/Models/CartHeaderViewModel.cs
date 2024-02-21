@@ -6,5 +6,5 @@ public class CartHeaderViewModel
     public string UserId { get; set; }
     public string CouponCode { get; set; }
 
-    public double TotalAmount { get; set; } = 0.00d;
+    public decimal TotalAmount { get; set; } = 0.00m;
 }

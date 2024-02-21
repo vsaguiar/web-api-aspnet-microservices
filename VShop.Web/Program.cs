@@ -14,16 +14,6 @@ namespace VShop.Web
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            #region HttpClientFactory - cliente nomeado
-            builder.Services.AddHttpClient<IProductService, ProductService>("ProductApi", c =>
-            {
-                c.BaseAddress = new Uri(builder.Configuration["ServiceUri:ProductApi"]);
-            });
-
-            builder.Services.AddHttpClient<ICartService, CartService>("CartApi",
-                c => c.BaseAddress = new Uri(builder.Configuration["ServiceUri:CartApi"]));
-            #endregion
-
             #region Autenticação
             builder.Services.AddAuthentication(options =>
             {
@@ -64,6 +54,19 @@ namespace VShop.Web
                     options.Scope.Add("vshop");
                     options.SaveTokens = true;
                 });
+            #endregion
+
+            #region HttpClientFactory - cliente nomeado
+            builder.Services.AddHttpClient<IProductService, ProductService>("ProductApi", c =>
+            {
+                c.BaseAddress = new Uri(builder.Configuration["ServiceUri:ProductApi"]);
+                c.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
+                c.DefaultRequestHeaders.Add("Keep-Alive", "3600");
+                c.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-ProductApi");
+            });
+
+            builder.Services.AddHttpClient<ICartService, CartService>("CartApi",
+                c => c.BaseAddress = new Uri(builder.Configuration["ServiceUri:CartApi"]));
             #endregion
 
             builder.Services.AddScoped<ICartService, CartService>();
