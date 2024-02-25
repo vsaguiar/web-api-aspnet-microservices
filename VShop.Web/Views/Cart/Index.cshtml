@@ -6,7 +6,7 @@
         <br/>
         <input asp-for="CartHeader.UserId" hidden />
         <input asp-for="CartHeader.Id" hidden />
-        @* <input asp-for="CartItems" hidden /> *@
+        <input asp-for="CartItems" hidden />
         <div>
             <div class="card border mt-4 container">
                 <div class="card-header bg-dark text-light ml-0 row">
@@ -85,7 +85,7 @@
                             {
                                 <span style="font-weight:bold">Discount:</span>
                                 <input asp-for="CartHeader.CouponCode" disabled />
-                                <button type="submit" asp-action="DeleteCoupon" class="btn btn-info" class="btn-danger" style="font-weight:bold;">
+                                <button type="submit" asp-action="DeleteCoupon" class="btn btn-danger" style="font-weight:bold;">
                                     Delete
                                 </button>
                             }

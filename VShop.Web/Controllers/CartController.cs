@@ -57,6 +57,32 @@ public class CartController : Controller
         return await HttpContext.GetTokenAsync("access_token");
     }
 
+    [HttpPost]
+    public async Task<IActionResult> ApplyCoupon(CartViewModel cartVM)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _cartService.ApplyCouponAsync(cartVM, await GetAccessToken());
+            if (result)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+        }
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteCoupon()
+    {
+        var result = await _cartService.RemoveCouponAsync(GetUserId(), await GetAccessToken());
+
+        if (result)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+        return View();
+    }
+
     private string GetUserId()
     {
         return User.Claims
