@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VShop.Web.Models;
+using VShop.Web.Services;
 using VShop.Web.Services.Interfaces;
 
 namespace VShop.Web.Controllers;
@@ -9,9 +10,11 @@ namespace VShop.Web.Controllers;
 public class CartController : Controller
 {
     private readonly ICartService _cartService;
-    public CartController(ICartService cartService)
+    private readonly ICouponService _couponService;
+    public CartController(ICartService cartService, ICouponService couponService)
     {
         _cartService = cartService;
+        _couponService = couponService;
     }
 
 
@@ -42,12 +45,26 @@ public class CartController : Controller
     private async Task<CartViewModel> GetCartByUser()
     {
         var cart = await _cartService.GetCartByUserIdAsync(GetUserId(), await GetAccessToken());
+
         if (cart?.CartHeader is not null)
         {
+            if (!string.IsNullOrEmpty(cart.CartHeader.CouponCode))
+            {
+                var coupon = await _couponService.GetDiscountCoupon(cart.CartHeader.CouponCode,
+                                                                    await GetAccessToken());
+                if (coupon?.CouponCode is not null)
+                {
+                    cart.CartHeader.Discount = coupon.Discount;
+                }
+            }
             foreach (var item in cart.CartItems)
             {
-                cart.CartHeader.TotalAmount += item.Product.Price * item.Quantity;
+                cart.CartHeader.TotalAmount += (item.Product.Price * item.Quantity);
             }
+
+            cart.CartHeader.TotalAmount = cart.CartHeader.TotalAmount -
+                                         (cart.CartHeader.TotalAmount *
+                                          cart.CartHeader.Discount) / 100;
         }
         return cart;
     }

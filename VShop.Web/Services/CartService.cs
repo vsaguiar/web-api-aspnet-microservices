@@ -9,7 +9,7 @@ namespace VShop.Web.Services;
 public class CartService : ICartService
 {
     private readonly IHttpClientFactory _clientFactory;
-    private readonly JsonSerializerOptions? _options;
+    private readonly JsonSerializerOptions _options;
     private const string apiEndpoint = "/api/cart";
     private CartViewModel cartVM = new CartViewModel();
 
