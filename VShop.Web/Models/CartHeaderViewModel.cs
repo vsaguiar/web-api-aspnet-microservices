@@ -10,4 +10,15 @@ public class CartHeaderViewModel
 
     // Desconto
     public decimal Discount { get; set; } = 0.00m;
+
+    //checkout
+    public string FirstName { get; set; }
+    public string LastName { get; set; } 
+    public DateTime DateTime { get; set; }
+    public string Telephone { get; set; }
+    public string Email { get; set; } 
+    public string CardNumber { get; set; } 
+    public string NameOnCard { get; set; } 
+    public string CVV { get; set; } 
+    public string ExpireMonthYear { get; set; } 
 }

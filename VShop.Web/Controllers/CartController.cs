@@ -18,6 +18,34 @@ public class CartController : Controller
     }
 
 
+    [HttpGet]
+    public async Task<IActionResult> Checkout()
+    {
+        CartViewModel cartVM = await GetCartByUser();
+        return View(cartVM);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Checkout(CartViewModel cartVM)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _cartService.CheckoutAsync(cartVM.CartHeader, await GetAccessToken());
+
+            if (result is not null)
+            {
+                return RedirectToAction(nameof(CheckoutCompleted));
+            }
+        }
+        return View(cartVM);
+    }
+
+    [HttpGet]
+    public IActionResult CheckoutCompleted()
+    {
+        return View();
+    }
+
     [Authorize]
     public async Task<IActionResult> Index()
     {
